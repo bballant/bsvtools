@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+ <script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
+<!-- localhost: ABQIAAAArZCcPgOPnPsubenvC7ACVhSewxu6IW1aIbyeEtjFyFLaPBABFRSyVke4WWbMsD5Jtz1t5_eUtePNzw -->
+ <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=ABQIAAAArZCcPgOPnPsubenvC7ACVhSewxu6IW1aIbyeEtjFyFLaPBABFRSyVke4WWbMsD5Jtz1t5_eUtePNzw" type="text/javascript"></script>
+ <link href="/css/global.css" type="text/css" rel="stylesheet"/>
+ <script src="/prototype.js"></script>
+ <script src="/main.js"></script>
+ <script>
+    var viewer;
+
+    function loadCoordinates() {
+        url = "/coordinates";
+        new Ajax.Request(url, {
+            method: 'get',
+            onSuccess: function(transport, json) {
+                var response = transport.responseText || "[]";
+                var data = eval("(" + response + ")");
+                createMap(data);
+                createTimeline(data, document.getElementById("map"));
+            }
+        });
+    }   
+
+    function loadFrameViewer() {
+        if (!viewer) 
+            viewer = new FrameViewer($("viewer_canvas"),
+                            $("button_prev_frame"),
+                            $("button_prev_second"),
+                            $("button_next_frame"),
+                            $("button_next_second"));
+        viewer.loadData({'count': 5});
+    }
+    
+    function onLoad() {
+        loadCoordinates();
+        loadFrameViewer();
+    }
+ </script>
+</head>
+<body onload="onLoad();" onresize="onResize();">
+  <div id="map_canvas" style="width:100%; height:300px;"></div>
+  <div id="map" style="height:100px;"></div>
+  <hr/>
+  <div id="button_holder" style="width:100%">
+    <input value="/\ /\ prev frame /\ /\" type="button" id="button_prev_frame" style="width:50%; float:left;"/>
+    <input value="/\ /\ prev second /\ /\" type="button" id="button_prev_second" style="width:50%; float:left;"/>
+  </div> 
+  <div id="viewer_canvas" style="width:100%; height:520px; overflow: auto;">
+  </div>
+  <div id="button_holder" style="width:100%">
+    <input value="\/ \/ next frame \/ \/" type="button" id="button_next_frame" style="width:50%; float:left;"/>
+    <input value="\/ \/ next second \/ \/" type="button" id="button_next_second" style="width:50%; float:left;"/>
+  </div>
+
+</body>
+</html>

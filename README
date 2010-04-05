@@ -1,0 +1,37 @@
+tigrtools - BUG Street View Tools
+
+Tools for manipulating street view images taken w/ the "octocam".
+
+Any tool will show options if run w/ --help flag.  i.e. ./composite.py --help
+
+
+
+Tools Summary:
+
+
+-- composite.py -
+Creates a series of composite frames for viewing octocam mission results.
+Example:
+    ./composite.py -b ~/work/darpa/data/finaltest01/out/ -F FreeMonoBold.ttf -d ~/tmp/finalout01
+The output can then be turned into a movie using ffmpeg:
+ffmpeg -r 25 -i ~/tmp/finalout01/img_%05d.jpg -b 3600k officetest06.swf
+NOTE: Requires the Python Image Library (included in most python installs)
+
+
+-- sequence.py --
+For generating a subset of images from the raw data.
+Example:
+    ./sequence.py -b ~/work/darpa/data/finaltest01/out/ -d ~/tmp/seqout01 -s 8486A360_2010_03_04-16:04:31.556.jpg -i 10
+
+	
+-- gen_web.py ---
+Catalogs images, gps coords, and tagged events into a sqlite3 table.
+Example:
+    ./gen_web.py -b ~/work/darpa/data/finaltest01/out/ -G ~/work/darpa/data/finaltest01/LOCATION-LOG.2010-03-04@16:05:35.789.log -E ~/work/darpa/data/finaltest01/GPSTEST-TAGFILE.2010-03-04@16:10:32.784.log -q ~/tmp/images.sqlite3
+	
+	
+-- run_web.py ----
+Run's a mini website for viewing mission results.  Site shows a map, timeline, and images interface
+Example:
+    ./run_web.py -b ~/work/darpa/data/finaltest01/out/ -q ~/tmp/images.sqlite3
+NOTE: Requires cherrypy (http server, best installed manually via "python setup.py install")
