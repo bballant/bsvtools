@@ -35,3 +35,7 @@ Run's a mini website for viewing mission results.  Site shows a map, timeline, a
 Example:
     ./run_web.py -b ~/work/darpa/data/finaltest01/out/ -q ~/tmp/images.sqlite3
 NOTE: Requires cherrypy (http server, best installed manually via "python setup.py install")
+
+
+-- main.py --
+Set some properties in the file and run.  This does things w/ defaults for the live test/demonstration.
