@@ -25,27 +25,28 @@ var util = {
 
 
 // onclick handler //
-Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
-    var lat = evt._obj.point.lat;
-    var lon = evt._obj.point.lon;
-    var start = evt.getStart();
-    var startstr = start ? start.toString() : "";
-    // remove existing markers
-    while(markers.length != 0)
-        map.removeOverlay(markers.pop());
-
-    if (lat && lon) {
-        marker = new GMarker(new GLatLng(lat, lon));
-        markers.push(marker);
-        map.addOverlay(marker);
-        marker.openInfoWindowHtml(startstr + "<br/>" + lat + ", " + lon);
-    }
+function addEventHandler(viewer) {
+    Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
+        var lat = evt._obj.point.lat;
+        var lon = evt._obj.point.lon;
+        var start = evt.getStart();
+        var startstr = start ? start.toString() : "";
+        // remove existing markers
+        while(markers.length != 0)
+            map.removeOverlay(markers.pop());
     
-    if (start) {
-        viewer.load_data({'starttime': util.formatForWeb(start)});
-    } 
+        if (lat && lon) {
+            marker = new GMarker(new GLatLng(lat, lon));
+            markers.push(marker);
+            map.addOverlay(marker);
+            marker.openInfoWindowHtml(startstr + "<br/>" + lat + ", " + lon);
+        }
+        
+        if (start) {
+            viewer.loadData({'starttime': util.formatForWeb(start)});
+        } 
+    }
 }
-
   
 // Create functions called from Ajax callback w/ json 'data' //
 

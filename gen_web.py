@@ -40,7 +40,7 @@ def gpshash(ftable, events):
         gps_hash[frame[0].timestamp()] = closest
     return gps_hash
 
-def gpsevents(gpsfile, istagged=False):
+def gpsevents(gpsfile=None, istagged=False):
     """
     Return a sorted list of GPSEvents given the path to a file of data
     gpsfile should have timestamped gps coordinates, 
@@ -49,11 +49,12 @@ def gpsevents(gpsfile, istagged=False):
     2010-03-04@16:11:08.551,40.70618@-73.99017333333333
     2010-03-04@16:24:12.221,40.681415@-73.96160666666667
     """
+    if not(gpsfile) or len(gpsfile) == 0: return []
     fgps = open(gpsfile, 'r')
     lines = fgps.readlines()
     events = []
     for coord in lines:
-        events.append(common.GPSEvent(coord, is_event=istagged))
+        events.append(common.GPSEvent(coord, tagged=istagged))
     events.sort(key=lambda taggedevent: taggedevent.timestamp())
     fgps.close()
     return events
@@ -68,7 +69,7 @@ def create_db(sql_file, numcams):
         "create table images ( " +\
           "id INTEGER PRIMARY KEY, " +\
           "datetime TIMESTAMP, " +\
-          "lat REAL, lon REAL, is_event INTEGER DEFAULT 0, " +\
+          "lat REAL, lon REAL, is_tagged INTEGER DEFAULT 0, " +\
           camstr + ");")
     conn.commit()
     c.close()
@@ -85,7 +86,7 @@ def load_db(sql_file, ftable, eventhash):
         values = [n, frame[0].timestamp()]
         event = eventhash[frame[0].timestamp()] if frame[0].timestamp() in eventhash else None
         if event:
-            values += [event.lat(), event.lon(), event.is_event()]
+            values += [event.lat(), event.lon(), event.is_tagged()]
         else:
             values += [None,None,None]
         values += list("/".join(f.filename().split("/")[-3:]) for f in frame)

@@ -3,6 +3,7 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
  <script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
+<!-- 192.168.0.197 (I think): ABQIAAAArZCcPgOPnPsubenvC7ACVhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxTiyEDscrbkGhKJMYPfmVQAhPlBaQ -->
 <!-- localhost: ABQIAAAArZCcPgOPnPsubenvC7ACVhSewxu6IW1aIbyeEtjFyFLaPBABFRSyVke4WWbMsD5Jtz1t5_eUtePNzw -->
  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=ABQIAAAArZCcPgOPnPsubenvC7ACVhSewxu6IW1aIbyeEtjFyFLaPBABFRSyVke4WWbMsD5Jtz1t5_eUtePNzw" type="text/javascript"></script>
  <link href="/css/global.css" type="text/css" rel="stylesheet"/>
@@ -32,6 +33,7 @@
                             $("button_next_frame"),
                             $("button_next_second"));
         viewer.loadData({'count': 5});
+        addEventHandler(viewer);
     }
     
     function onLoad() {

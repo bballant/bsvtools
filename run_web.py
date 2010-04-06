@@ -125,7 +125,8 @@ def run_web(img_dir, sql_file):
     """
     # Set up site-wide config first
     cherrypy.config.update(
-        {'server.socket_host': '192.168.0.197',
+        {#'server.socket_host': '192.168.0.197',
+         'server.socket_host': 'localhost',
          'server.socket_port': 8020,
          'server.thread_pool': 10})
     # Set up local config

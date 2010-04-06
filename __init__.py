@@ -46,8 +46,8 @@ class GPSEvent(object):
         lat, lon = map(float, locstr.split('@'))
         return timestamp, lat, lon
   
-    def is_event(self):
-        return self._is_event
+    def is_tagged(self):
+        return self._tagged
   
     def timestamp(self):
         return self._timestamp
@@ -70,52 +70,20 @@ def get_opts():
       Program arguments are optional.
     """
     parser = OptionParser(usage)
-    #parser.add_option("-n", "--numcams", 
-    #                  help="Number of cameras, or images per frame", 
-    #                  type="int", dest="num", default=8)
-    #parser.add_option("-s", "--size", default="960x720")
     parser.add_option("-b", "--base", 
                       help="Directory of image folders, where the source comes from", 
                       default=None)
     parser.add_option("-d", "--dest",
                       help="Folder in dir to store output", 
                       default="out")
-    #parser.add_option("-t", "--font", 
-    #                  help="Path to a font to use")
     parser.add_option("-s", "--start_file",
                       help="Image in video0 to find start sequence")
-    #parser.add_option("-e", "--event",
-    #                  help="path to event file")
-    #parser.add_option("-g", "--gps",
-    #                  help="path to timestamped gps file")
     parser.add_option("-i", "--image_count",
                       help="Number of images in the sequence", 
                       type="int", default=0)
     parser.add_option("-q", "--sql",
                       help="sql file for web stuff",
                       default="images.sqlite3") 
-    #parser.add_option("-c", "--composite",
-    #                  help="Create composite images in output for video generation",
-    #                  action="store_true", default=False)
-    #parser.add_option("-q", "--sequence",
-    #                  help="Create image sequence in output for later stitching",
-    #                  action="store_true", default=False)
-    #parser.add_option("-m", "--html",
-    #                  help="Create a web-based visualization",
-    #                  action="store_true", default=False)
-    #parser.add_option("-w", "--run_web",
-    #                  help="Run the web app",
-    #                  action="store_true", default=False)
-    #parser.add_option("-O", "--old_way",
-    #                  help="old data",
-    #                  action="store_true", default=False)
-    #parser.add_option("-x", "--xxx",
-    #                  help="start generating at frame xxx", 
-    #                  type="int", default=0)
-    #sizere = re.compile(r'^([0-9]{2,4})x([0-9]{2,4})$')
-    #opts,args=parser.parse_args()
-    #if not sizere.match( opts.size ):
-    #    parser.error("Invalid format for size.  Use WIDTHxHEIGHT" )
     return parser
 
 
@@ -130,7 +98,7 @@ def create_frametable(base_dir, cams, start_image=None, image_count=0):
     
 
 def frame_image_list(base_dir, cams):
-    # first create a list of frame images to sort
+    """first sort all the FrameImages for each cam"""
     dirs = []
     for cam in cams: 
         dirs.append(os.path.join(base_dir, cam))    
@@ -151,6 +119,7 @@ def frame_image_list(base_dir, cams):
 
 
 def frametable(fimg, num_cams, start_image=None, image_count=0):
+    """match up the FrameImages from each cam and put in a table"""
     ftable = []
     # load ftable with keyframes from CAM[0]
     n = 0
