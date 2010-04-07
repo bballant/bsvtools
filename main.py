@@ -10,8 +10,8 @@ import gen_web, run_web, composite
 import sys, os, threading
 
 BASE_DIR    = "/media/disk/out"
-EVENT_FILE  = "" 
-GPS_FILE    = "/media/disk/LOCATION-LOG.2010-04-01@18:16:31.229.log"
+EVENT_FILE  = "/media/disk/out/GPSTEST-TAGFILE.2010-04-07@14:43:58.250.log" 
+GPS_FILE    = "/media/disk/out/LOCATION-LOG.2010-04-07@14:37:37.228.log"
 SQL_FILE    = "/tmp/images.sqlite3"
 FONT_FILE   = "FreeMonoBold.ttf"
 
@@ -23,7 +23,8 @@ if __name__ == '__main__':
         composite.write_images(ftable, sys.argv[2], "960x720", 
                  len(cams), FONT_FILE) 
     else:
-        tagged_hash = gen_web.taggedhash(ftable, gen_web.gpsevents(EVENT_FILE, True))
+        taggedevents = gen_web.gpsevents(EVENT_FILE, True)
+        tagged_hash = gen_web.taggedhash(ftable, taggedevents)
         gps_hash = gen_web.gpshash(ftable, gen_web.gpsevents(GPS_FILE))
         gps_hash.update(tagged_hash)
         gen_web.create_db(SQL_FILE, len(cams))

@@ -96,6 +96,7 @@ function createTimeline(data, canvas) {
     //var startdate = new Date("Mar 02 2010 19:33:10 GMT-0500"); // initial date
     var bandInfos = [
         Timeline.createBandInfo({
+           timeZone: -4,
            width: "60%", 
            intervalUnit: Timeline.DateTime.MINUTE, 
            intervalPixels: 300,
@@ -104,6 +105,7 @@ function createTimeline(data, canvas) {
            date: startdate 
          }),
         Timeline.createBandInfo({
+          timeZone: -4,
           showEventText: false,
           width: "40%", 
           intervalUnit: Timeline.DateTime.HOUR, 
