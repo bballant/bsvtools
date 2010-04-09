@@ -10,8 +10,8 @@ import gen_web, run_web, composite
 import sys, os, threading
 
 BASE_DIR    = "/media/disk/out"
-EVENT_FILE  = "/media/disk/out/GPSTEST-TAGFILE.2010-04-07@14:43:58.250.log" 
-GPS_FILE    = "/media/disk/out/LOCATION-LOG.2010-04-07@14:37:37.228.log"
+EVENT_FILE  = "/media/disk/out/GPSTEST-TAGFILE.log" 
+GPS_FILE    = "/media/disk/out/LOCATION-LOG.log"
 SQL_FILE    = "/tmp/images.sqlite3"
 FONT_FILE   = "FreeMonoBold.ttf"
 
@@ -22,6 +22,16 @@ if __name__ == '__main__':
         common.create_dir(sys.argv[2])
         composite.write_images(ftable, sys.argv[2], "960x720", 
                  len(cams), FONT_FILE) 
+    elif len(sys.argv) == 2 and sys.argv[1] == "avgsizes":
+        cams = common.list_cams(common.CAMS)
+        ftable = common.create_frametable(BASE_DIR, cams)
+        totsize = 0
+        count = 0
+        for frame in ftable:
+            for fi in frame:
+                totsize += os.path.getsize(fi.filename())
+                count += 1
+        print ((totsize / count) / 1024.00)
     else:
         cams = common.list_cams(common.CAMS)
         ftable = common.create_frametable(BASE_DIR, cams)

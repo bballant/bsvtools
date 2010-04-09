@@ -6,7 +6,6 @@ Created on Mar 16, 2010
 '''
 import __init__ as common
 
-
 def taggedhash(ftable, events):
     """
     Returns a hash of GPSEvents, one for each tagged event
@@ -75,7 +74,6 @@ def create_db(sql_file, numcams):
     c.close()
     conn.close()
 
-
 def load_db(sql_file, ftable, eventhash):
     conn = common.get_sql_conn(sql_file)
     c = conn.cursor()
@@ -95,8 +93,7 @@ def load_db(sql_file, ftable, eventhash):
     conn.commit()
     c.close()
     conn.close()
-
-
+    
 def get_more_opts(parser):
     """
     Gets options specific to this module
