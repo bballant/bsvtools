@@ -5,6 +5,8 @@ Created on Mar 16, 2010
 @author: brian
 '''
 import __init__ as common
+import os, threading
+import run_web
 
 def taggedhash(ftable, events):
     """
@@ -102,6 +104,9 @@ def get_more_opts(parser):
                       help="path to event file")
     parser.add_option("-G", "--gps",
                       help="path to timestamped gps file")
+    parser.add_option("-R", "--run",
+                      help="Run web server and launch the browser",
+                      action="store_true", default=False)
     opts,args=parser.parse_args()
     return opts,args 
 
@@ -111,13 +116,28 @@ if __name__ == '__main__':
         - example:
             ./gen_web.py -b ~/work/darpa/data/finaltest01/out/ -G ~/work/darpa/data/finaltest01/LOCATION-LOG.2010-03-04@16:05:35.789.log -E ~/work/darpa/data/finaltest01/GPSTEST-TAGFILE.2010-03-04@16:10:32.784.log -q ~/tmp/images.sqlite3
     """
+    # gather command line options
     parser = common.get_opts()
     opts, args = get_more_opts(parser)
+    # re-order list of cams for web display
     cams = common.list_cams(common.CAMS)
+    # order frames and put in a "frame table"
     ftable = common.create_frametable(opts.base, cams,
                                       opts.start_file, opts.image_count)
-    tagged_hash = taggedhash(ftable, gpsevents(opts.event, True))
-    gps_hash = gpshash(ftable, gpsevents(opts.gps))
+    # get default gps and events files
+    fevents = opts.event if opts.event else\
+        os.path.join(opts.base, "GPSTEST-TAGFILE.log") 
+    fgps = opts.gps if opts.gps else\
+        os.path.join(opts.base, "LOCATION-LOG.log") 
+    # parse gps and tag files for use
+    tagged_hash = taggedhash(ftable, gpsevents(fevents, True))
+    gps_hash = gpshash(ftable, gpsevents(fgps))
     gps_hash.update(tagged_hash)
+    # create and load db w/ frame table and gps info
     create_db(opts.sql, len(cams))
     load_db(opts.sql, ftable, gps_hash)    
+    # run the website and launch firefox if we are asked to do that
+    if (opts.run):        
+        thread = threading.Thread(target=lambda: os.system("firefox http://localhost:8020"))    
+        thread.start()
+        run_web.run_web(opts.base, opts.sql)

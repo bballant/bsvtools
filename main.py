@@ -3,6 +3,9 @@
 Created on Apr 6, 2010
 
 @author: brian
+
+This file is just a convenience to set things up statically for presentation purposes
+Better to use the different tools individually.  See README.
 '''
 
 import __init__ as common
